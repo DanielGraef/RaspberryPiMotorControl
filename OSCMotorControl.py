@@ -21,7 +21,7 @@ def handle_timeout(self):
 server.handle_timeout = types.MethodType(handle_timeout, server)
 
 class Motor(object):
-        def __init__(self, pins):
+        def __init__(self):
                 GPIO.setup(3, GPIO.OUT)
                 GPIO.setup(5, GPIO.OUT)
                 GPIO.setup(7, GPIO.OUT)
