@@ -31,9 +31,9 @@ class Motor(object):
                 GPIO.setup(12, GPIO.OUT)
                 GPIO.setup(13, GPIO.OUT)
 
-        StepDelay = 0.1
+        self.StepDelay = 0.1
 
-        def turn_motor_x_left(self):
+        def turn_motor_x_left(self,):
                 GPIO.output(self.3, GPIO.HIGH)
                 time.sleep(self.StepDelay)
                 GPIO.output(self.3, GPIO.LOW)
@@ -52,58 +52,10 @@ class Motor(object):
                 time.sleep(self.StepDelay)
 
         def turn_motor_x_right(self):
-                GPIO.output(self.8, GPIO.HIGH)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.8, GPIO.LOW)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.7, GPIO.HIGH)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.7, GPIO.LOW)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.5, GPIO.HIGH)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.5, GPIO.LOW)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.3, GPIO.HIGH)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.3, GPIO.LOW)
-                time.sleep(self.StepDelay)
 
         def turn_motor_y_Up(self):
-                GPIO.output(self.10, GPIO.HIGH)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.10, GPIO.LOW)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.11, GPIO.HIGH)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.11, GPIO.LOW)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.12, GPIO.HIGH)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.12, GPIO.LOW)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.13, GPIO.HIGH)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.13, GPIO.LOW)
-                time.sleep(self.StepDelay)
 
         def turn_motor_y_Down(self):
-               GPIO.output(self.13, GPIO.HIGH)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.13, GPIO.LOW)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.12, GPIO.HIGH)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.12, GPIO.LOW)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.11, GPIO.HIGH)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.11, GPIO.LOW)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.10, GPIO.HIGH)
-                time.sleep(self.StepDelay)
-                GPIO.output(self.10, GPIO.LOW)
-                time.sleep(self.StepDelay)
 
 m = Motor()
 
@@ -148,7 +100,22 @@ def turn_motor_Right_handler(path, tags, args, source):
         motor_x_right = args
         print("args", motor_x_right)
         if motor_x_right == [1.0]:
-                m.turn_motor_right
+                GPIO.output(8, GPIO.HIGH)
+                time.sleep(sStepDelay)
+                GPIO.output(8, GPIO.LOW)
+                time.sleep(StepDelay)
+                GPIO.output(7, GPIO.HIGH)
+                time.sleep(StepDelay)
+                GPIO.output(7, GPIO.LOW)
+                time.sleep(StepDelay)
+                GPIO.output(5, GPIO.HIGH)
+                time.sleep(StepDelay)
+                GPIO.output(5, GPIO.LOW)
+                time.sleep(StepDelay)
+                GPIO.output(3, GPIO.HIGH)
+                time.sleep(StepDelay)
+                GPIO.output(3, GPIO.LOW)
+                time.sleep(StepDelay)
         else:
                 GPIO.output(8, GPIO.LOW)
                 GPIO.output(7, GPIO.LOW)
@@ -161,7 +128,22 @@ def turn_motor_Up_handler(path, tags, args, source):
         motor_y_up = args
         print("args", motor_y_up)
         if motor_y_up == [1.0]:
-                m.turn_motor_y_Up()
+                GPIO.output(10, GPIO.HIGH)
+                time.sleep(StepDelay)
+                GPIO.output(10, GPIO.LOW)
+                time.sleep(StepDelay)
+                GPIO.output(11, GPIO.HIGH)
+                time.sleep(StepDelay)
+                GPIO.output(11, GPIO.LOW)
+                time.sleep(StepDelay)
+                GPIO.output(12, GPIO.HIGH)
+                time.sleep(StepDelay)
+                GPIO.output(12, GPIO.LOW)
+                time.sleep(StepDelay)
+                GPIO.output(13, GPIO.HIGH)
+                time.sleep(StepDelay)
+                GPIO.output(13, GPIO.LOW)
+                time.sleep(StepDelay)
         else:
                 GPIO.output(10, GPIO.LOW)
                 GPIO.output(11, GPIO.LOW)
@@ -174,7 +156,22 @@ def turn_motor_Down_handler(path, tags, args, source):
         motor_y_down = args
         print("args", motor_y_down)
         if motor_y_down == [1.0]:
-                m.turn_motor_y_Down
+                GPIO.output(13, GPIO.HIGH)
+                time.sleep(StepDelay)
+                GPIO.output(13, GPIO.LOW)
+                time.sleep(StepDelay)
+                GPIO.output(12, GPIO.HIGH)
+                time.sleep(StepDelay)
+                GPIO.output(12, GPIO.LOW)
+                time.sleep(StepDelay)
+                GPIO.output(11, GPIO.HIGH)
+                time.sleep(StepDelay)
+                GPIO.output(11, GPIO.LOW)
+                time.sleep(StepDelay)
+                GPIO.output(10, GPIO.HIGH)
+                time.sleep(StepDelay)
+                GPIO.output(10, GPIO.LOW)
+                time.sleep(StepDelay)
         else:
                 GPIO.output(13, GPIO.LOW)
                 GPIO.output(12, GPIO.LOW)
