@@ -31,31 +31,31 @@ class Motor(object):
                 GPIO.setup(12, GPIO.OUT)
                 GPIO.setup(13, GPIO.OUT)
 
-        self.StepDelay = 0.1
+        StepDelay = 0.1
 
-        def turn_motor_x_left(self,):
-                GPIO.output(self.3, GPIO.HIGH)
+        def turn_motor_x_left(self):
+                GPIO.output(3, GPIO.HIGH)
                 time.sleep(self.StepDelay)
-                GPIO.output(self.3, GPIO.LOW)
+                GPIO.output(3, GPIO.LOW)
                 time.sleep(self.StepDelay)
-                GPIO.output(self.5, GPIO.HIGH)
+                GPIO.output(5, GPIO.HIGH)
                 time.sleep(self.StepDelay)
-                GPIO.output(self.5, GPIO.LOW)
+                GPIO.output(5, GPIO.LOW)
                 time.sleep(self.StepDelay)
-                GPIO.output(self.7, GPIO.HIGH)
+                GPIO.output(7, GPIO.HIGH)
                 time.sleep(self.StepDelay)
-                GPIO.output(self.7, GPIO.LOW)
+                GPIO.output(7, GPIO.LOW)
                 time.sleep(self.StepDelay)
-                GPIO.output(self.8, GPIO.HIGH)
+                GPIO.output(8, GPIO.HIGH)
                 time.sleep(self.StepDelay)
-                GPIO.output(self.8, GPIO.LOW)
+                GPIO.output(8, GPIO.LOW)
                 time.sleep(self.StepDelay)
 
-        def turn_motor_x_right(self):
+       # def turn_motor_x_right(self):
 
-        def turn_motor_y_Up(self):
+       # def turn_motor_y_Up(self):
 
-        def turn_motor_y_Down(self):
+       # def turn_motor_y_Down(self):
 
 m = Motor()
 
@@ -87,7 +87,7 @@ def turn_motor_Left_handler(path, tags, args, source):
 	motor_x_left = args
 	print("args", motor_x_left)
 	if motor_x_left == [1.0]:
-		m.turn_motor_Left()
+		m.turn_motor_x_left()
 	else: 
 		GPIO.output(3, GPIO.LOW)
 		GPIO.output(5, GPIO.LOW)
@@ -96,12 +96,14 @@ def turn_motor_Left_handler(path, tags, args, source):
 
 server.addMsgHandler( "/1/pushLeft",turn_motor_Left_handler)
 
+StepDelay = 0.1
+
 def turn_motor_Right_handler(path, tags, args, source):
         motor_x_right = args
         print("args", motor_x_right)
         if motor_x_right == [1.0]:
                 GPIO.output(8, GPIO.HIGH)
-                time.sleep(sStepDelay)
+                time.sleep(StepDelay)
                 GPIO.output(8, GPIO.LOW)
                 time.sleep(StepDelay)
                 GPIO.output(7, GPIO.HIGH)
