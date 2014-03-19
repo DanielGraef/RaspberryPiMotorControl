@@ -7,14 +7,7 @@ import RPi.GPIO as GPIO
 #GPIO Setup
 
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(3, GPIO.OUT)
-GPIO.setup(5, GPIO.OUT)
-GPIO.setup(7, GPIO.OUT)
-GPIO.setup(8, GPIO.OUT)
-GPIO.setup(10, GPIO.OUT)
-GPIO.setup(11, GPIO.OUT)
-GPIO.setup(12, GPIO.OUT)
-GPIO.setup(13, GPIO.OUT)
+
 
 #OSC Server Setup
 
@@ -26,6 +19,19 @@ def handle_timeout(self):
 	print ("Timeout")
 
 server.handle_timeout = types.MethodType(handle_timeout, server)
+
+class Motor(object):
+        def __init__(self, pins):
+                GPIO.setup(3, GPIO.OUT)
+                GPIO.setup(5, GPIO.OUT)
+                GPIO.setup(7, GPIO.OUT)
+                GPIO.setup(8, GPIO.OUT)
+                GPIO.setup(10, GPIO.OUT)
+                GPIO.setup(11, GPIO.OUT)
+                GPIO.setup(12, GPIO.OUT)
+                GPIO.setup(13, GPIO.OUT)
+
+m = Motor()
 
 def fader_callback(path, tags, args, source):
 	print ("path", path) 
