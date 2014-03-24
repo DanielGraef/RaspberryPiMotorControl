@@ -14,7 +14,7 @@ server.handle_timeout = types.MethodType(handle_timeout, server)
 
 def fader_callback(path, tags, args, source):
 	print ("path", path) 
-	print ("args", args) 
+	print ("args", args[0]) 
 	print ("source", source) 
 	msg=OSCMessage("/1/rotary1")
 	msg.append(args);
