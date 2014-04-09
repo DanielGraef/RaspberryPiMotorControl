@@ -21,8 +21,7 @@ def handle_timeout(self):
 server.handle_timeout = types.MethodType(handle_timeout, server)
 
 class Motor(object):
-	StepCount = 0
-
+	
 	def __init__(self, pin):
 		self.P1 = pin [0]
 		self.P2 = pin [1]
@@ -70,12 +69,6 @@ class Motor(object):
                 GPIO.output(self.P1, GPIO.LOW)
                 time.sleep(self.StepDelay)
 
-	def motorcontrol(self, FaderValue): 
-		StepsToGo = FaderValue - Motor.StepCount
-		while StepsToGo > Motor.StepCount:
-			Motor.StepCount += 1
-			m1.turn_motor_left()
-			print ("stepcount", Motor.StepCount)
 			
 m1 = Motor([3,5,7,8])
 m2 = Motor([10,11,12,13])
@@ -87,20 +80,17 @@ def fader_callback(path, tags, args, source):
 	#msg=OSCMessage("/1/fader1")
 	#msg.append(args);
 	#client.send(msg)
-
-	FaderDelay = 2 
+ 
 	FaderValue = round(args[0])
-	print ("fadervalue", FaderValue)
-	time.sleep(FaderDelay)
-	m1.motorcontrol(FaderValue) 	
-	#StepCount = 0
-	#StepsToGo = FaderValue - StepCount
-	#if StepsToGo > StepCount:
-		#print ("vorward steps:", StepsToGo)
-	#while StepsToGo > StepCount:
-		#StepCount += 1
-		#m1.turn_motor_left()
-		#print ("stepcount", StepCount)
+	print ("fadervalue", FaderValue) 	
+	StepCount = 0
+	StepsToGo = FaderValue - StepCount
+	if StepsToGo > StepCount:
+		print ("vorward steps:", StepsToGo)
+	while StepsToGo >= StepCount:
+		StepCount += 1
+		m1.turn_motor_left()
+		print ("stepcount", StepCount)
 
 	#if FaderValue < stepcount:
 		#print ("backward")
