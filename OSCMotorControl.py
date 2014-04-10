@@ -73,9 +73,11 @@ class Motor(object):
 m1 = Motor([3,5,7,8])
 m2 = Motor([10,11,12,13])
 
+StepCount = 0
+
 def fader_callback(path, tags, args, source):
 	#print ("path", path) 
-	print ("args", args[0]) 
+	#print ("args", args[0]) 
 	#print ("source", source) 
 	#msg=OSCMessage("/1/fader1")
 	#msg.append(args);
@@ -83,21 +85,25 @@ def fader_callback(path, tags, args, source):
  
 	FaderValue = round(args[0])
 	print ("fadervalue", FaderValue) 	
-	StepCount = 0
-	StepsToGo = FaderValue - StepCount
-	if StepsToGo > StepCount:
-		print ("vorward steps:", StepsToGo)
-	while StepsToGo >= StepCount:
-		StepCount += 1
-		m1.turn_motor_left()
-		print ("stepcount", StepCount)
+	global StepCount
 
-	#if FaderValue < stepcount:
-		#print ("backward")
-		#backsteps = stepcount - FaderValue
-		#while backsteps < stepcout:
-			#stepcount -= 1
-			#m1.turn_motor_right()
+	StepsToGo = FaderValue - StepCount
+
+	if StepsToGo > StepCount:
+		#print ("vorward steps:", StepsToGo)
+		while StepsToGo >= StepCount:
+			StepCount += 1
+			m1.turn_motor_left()
+			print ("stepcount", StepCount)
+	
+	elif FaderValue < StepCount:
+		print ("backward")
+		backsteps = StepCount - FaderValue
+		print("backsteps",backsteps)
+		while FaderValue < StepCount:
+			StepCount -= 1
+			m1.turn_motor_right()
+
 
 server.addMsgHandler( "/1/fader1",fader_callback)
 
