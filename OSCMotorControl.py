@@ -87,23 +87,17 @@ def fader_callback(path, tags, args, source):
 	print ("fadervalue", FaderValue) 	
 	global StepCount
 
-	StepsToGo = FaderValue - StepCount
-
-	if StepsToGo > StepCount:
-		#print ("vorward steps:", StepsToGo)
-		while StepsToGo >= StepCount:
+	if FaderValue > StepCount:
+		while FaderValue > StepCount:
 			StepCount += 1
 			m1.turn_motor_left()
 			print ("stepcount", StepCount)
 	
 	elif FaderValue < StepCount:
-		print ("backward")
-		backsteps = StepCount - FaderValue
-		print("backsteps",backsteps)
 		while FaderValue < StepCount:
 			StepCount -= 1
 			m1.turn_motor_right()
-
+			print("stepcount", StepCount)
 
 server.addMsgHandler( "/1/fader1",fader_callback)
 
