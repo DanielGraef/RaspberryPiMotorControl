@@ -31,7 +31,7 @@ class Motor(object):
 			GPIO.setup(p, GPIO.OUT)
 			GPIO.output(p, 0)
 
-	StepDelay = 0.009
+	StepDelay = 0.005
 
 	def turn_motor_left(self):
                 GPIO.output(self.P1, GPIO.HIGH)
@@ -48,6 +48,35 @@ class Motor(object):
                 time.sleep(self.StepDelay)
                 GPIO.output(self.P4, GPIO.HIGH)
                 time.sleep(self.StepDelay)
+                GPIO.output(self.P4, GPIO.LOW)
+                time.sleep(self.StepDelay)
+	
+	def turn_bipol_left(self):
+		#1st step
+		GPIO.output(self.P1, GPIO.HIGH)
+		GPIO.output(self.P2, GPIO.LOW)
+		GPIO.output(self.P3, GPIO.LOW)
+		GPIO.output(self.P4, GPIO.HIGH)
+		time.sleep(self.StepDelay)
+		
+		#2nd step
+		GPIO.output(self.P1, GPIO.LOW)
+                GPIO.output(self.P2, GPIO.HIGH)
+                GPIO.output(self.P3, GPIO.LOW)
+                GPIO.output(self.P4, GPIO.HIGH)
+                time.sleep(self.StepDelay)
+		
+		#3rd step
+		GPIO.output(self.P1, GPIO.LOW)
+                GPIO.output(self.P2, GPIO.HIGH)
+                GPIO.output(self.P3, GPIO.HIGH)
+                GPIO.output(self.P4, GPIO.LOW)
+                time.sleep(self.StepDelay)
+	
+		#4rd Step
+		GPIO.output(self.P1, GPIO.HIGH)
+                GPIO.output(self.P2, GPIO.LOW)
+                GPIO.output(self.P3, GPIO.HIGH)
                 GPIO.output(self.P4, GPIO.LOW)
                 time.sleep(self.StepDelay)
 
@@ -67,6 +96,35 @@ class Motor(object):
                 GPIO.output(self.P1, GPIO.HIGH)
                 time.sleep(self.StepDelay)
                 GPIO.output(self.P1, GPIO.LOW)
+                time.sleep(self.StepDelay)
+
+	def turn_bipol_right(self):
+                #1st step
+		GPIO.output(self.P1, GPIO.HIGH)
+		GPIO.output(self.P2, GPIO.LOW)
+                GPIO.output(self.P3, GPIO.HIGH)
+                GPIO.output(self.P4, GPIO.LOW)
+                time.sleep(self.StepDelay)
+
+                #2nd step
+                GPIO.output(self.P1, GPIO.LOW) 
+                GPIO.output(self.P2, GPIO.HIGH)
+                GPIO.output(self.P3, GPIO.HIGH)
+                GPIO.output(self.P4, GPIO.LOW)
+                time.sleep(self.StepDelay)
+
+                #3rd step
+                GPIO.output(self.P1, GPIO.LOW) 
+                GPIO.output(self.P2, GPIO.HIGH)
+                GPIO.output(self.P3, GPIO.LOW)
+                GPIO.output(self.P4, GPIO.HIGH)
+                time.sleep(self.StepDelay)
+
+                #4rd Step
+                GPIO.output(self.P1, GPIO.HIGH)
+                GPIO.output(self.P2, GPIO.LOW)
+                GPIO.output(self.P3, GPIO.LOW)
+                GPIO.output(self.P4, GPIO.HIGH)
                 time.sleep(self.StepDelay)
 
 			
@@ -90,13 +148,13 @@ def fader_callback(path, tags, args, source):
 	if FaderValue > StepCount:
 		while FaderValue > StepCount:
 			StepCount += 1
-			m1.turn_motor_left()
+			m1.turn_bipol_left()
 			print ("stepcount", StepCount)
 	
 	elif FaderValue < StepCount:
 		while FaderValue < StepCount:
 			StepCount -= 1
-			m1.turn_motor_right()
+			m1.turn_bipol_right()
 			print("stepcount", StepCount)
 
 server.addMsgHandler( "/1/fader1",fader_callback)
