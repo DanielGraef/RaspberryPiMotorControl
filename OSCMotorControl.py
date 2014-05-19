@@ -134,14 +134,15 @@ m2 = Motor([10,11,12,13])
 StepCount = 0
 
 def fader_callback(path, tags, args, source):
-	#print ("path", path) 
-	#print ("args", args[0]) 
-	#print ("source", source) 
+	print ("path", path)
+	print("tags", tags) 
+	print ("args", args[0]) 
+	print ("source", source) 
 	#msg=OSCMessage("/1/fader1")
 	#msg.append(args);
 	#client.send(msg)
  
-	FaderValue = round(args[0])
+	FaderValue = round(args[0]*100)
 	print ("fadervalue", FaderValue) 	
 	global StepCount
 
@@ -158,6 +159,34 @@ def fader_callback(path, tags, args, source):
 			print("stepcount", StepCount)
 
 server.addMsgHandler( "/1/fader1",fader_callback)
+
+StepCount_m2 = 0
+
+def fader_2_callback(path, tags, args, source):
+        #print ("path", path) 
+        #print ("args", args[0]) 
+        #print ("source", source) 
+        #msg=OSCMessage("/1/fader1")
+        #msg.append(args);
+        #client.send(msg)
+
+        FaderValue = round(args[0])
+        print ("fadervalue", FaderValue)
+        global StepCount_m2
+
+        if FaderValue > StepCount_m2:
+                while FaderValue > StepCount_m2:
+                        StepCount_m2 += 1
+                        m2.turn_bipol_left()
+                        print ("stepcount", StepCount_m2)
+
+        elif FaderValue < StepCount_m2:
+                while FaderValue < StepCount_m2:
+                        StepCount_m2 -= 1
+                        m2.turn_bipol_right()
+                        print("stepcount", StepCount_m2)
+
+server.addMsgHandler( "/1/fader2",fader_2_callback)
 
 # Motorcontrol
 
