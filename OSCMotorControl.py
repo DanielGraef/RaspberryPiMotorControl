@@ -8,12 +8,15 @@ import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BOARD)
 
+GPIO.setup(24, GPIO.IN)
+GPIO.setup(26, GPIO.IN)
 
 #OSC Server Setup
 
 server = OSCServer( ("0.0.0.0", 8000) )
 client = OSCClient()
 client.connect( ("192.168.178.2", 9000) )
+
 
 def handle_timeout(self):
 	print ("Timeout")
@@ -33,7 +36,7 @@ class Motor(object):
 
 	StepDelay = 0.005
 
-	def turn_motor_left(self):
+	def turn_unipol_left(self):
                 GPIO.output(self.P1, GPIO.HIGH)
                 time.sleep(self.StepDelay)
                 GPIO.output(self.P1, GPIO.LOW)
@@ -80,7 +83,7 @@ class Motor(object):
                 GPIO.output(self.P4, GPIO.LOW)
                 time.sleep(self.StepDelay)
 
-	def turn_motor_right(self):
+	def turn_unipol_right(self):
 		GPIO.output(self.P4, GPIO.HIGH)
                 time.sleep(self.StepDelay)
                 GPIO.output(self.P4, GPIO.LOW)
@@ -127,9 +130,27 @@ class Motor(object):
                 GPIO.output(self.P4, GPIO.HIGH)
                 time.sleep(self.StepDelay)
 
-			
+# Creating instances for Motors 			
 m1 = Motor([3,5,7,8])
 m2 = Motor([10,11,12,13])
+
+	 	
+#Calibrating
+while True:
+	m1.turn_bipol_left()
+	calib_x = GPIO.input(26)
+	if (calib_x == True):
+		print("calibrated_x")
+		break
+
+#while True:
+	m2.turn_bipol_left()
+	calib_y = GPIO.input(24)
+	if (calib_y == True):
+		print("calibrated_y")
+		break
+
+# Fader 1 Handling
 
 StepCount = 0
 
@@ -160,6 +181,8 @@ def fader_callback(path, tags, args, source):
 
 server.addMsgHandler( "/1/fader1",fader_callback)
 
+# Fader 2 Handling
+
 StepCount_m2 = 0
 
 def fader_2_callback(path, tags, args, source):
@@ -188,63 +211,8 @@ def fader_2_callback(path, tags, args, source):
 
 server.addMsgHandler( "/1/fader2",fader_2_callback)
 
-# Motorcontrol
-
-def turn_motor_Left_handler(path, tags, args, source):
-	motor_x_left = args
-	print("args", motor_x_left)
-	if motor_x_left == [1.0]:
-		m1.turn_motor_left()
-	else: 
-		GPIO.output(3, GPIO.LOW)
-		GPIO.output(5, GPIO.LOW)
-		GPIO.output(7, GPIO.LOW)
-		GPIO.output(8, GPIO.LOW)
-
-server.addMsgHandler( "/1/pushLeft",turn_motor_Left_handler)
-
-StepDelay = 0.1
-
-def turn_motor_Right_handler(path, tags, args, source):
-        motor_x_right = args
-        print("args", motor_x_right)
-        if motor_x_right == [1.0]:
-		m1.turn_motor_right()	
-        else:
-                GPIO.output(8, GPIO.LOW)
-                GPIO.output(7, GPIO.LOW)
-                GPIO.output(5, GPIO.LOW)
-                GPIO.output(3, GPIO.LOW)
-
-server.addMsgHandler( "/1/pushRight",turn_motor_Right_handler)
-
-def turn_motor_Up_handler(path, tags, args, source):
-        motor_y_up = args
-        print("args", motor_y_up)
-        if motor_y_up == [1.0]:
-		m2.turn_motor_left()
-        else:
-                GPIO.output(10, GPIO.LOW)
-                GPIO.output(11, GPIO.LOW)
-                GPIO.output(12, GPIO.LOW)
-                GPIO.output(13, GPIO.LOW)
-
-server.addMsgHandler( "/1/pushUp",turn_motor_Up_handler)
-
-def turn_motor_Down_handler(path, tags, args, source):
-        motor_y_down = args
-        print("args", motor_y_down)
-        if motor_y_down == [1.0]:
-		m2.turn_motor_right()               
-        else:
-                GPIO.output(13, GPIO.LOW)
-                GPIO.output(12, GPIO.LOW)
-                GPIO.output(11, GPIO.LOW)
-                GPIO.output(10, GPIO.LOW)
-
-server.addMsgHandler( "/1/pushDown",turn_motor_Down_handler)
-
-while True:
+# Keep OSC Server running
+while True:	
 	server.handle_request()
 
 server.close()
