@@ -17,7 +17,7 @@ server = OSCServer( ("0.0.0.0", 8000) )
 client = OSCClient()
 client.connect( ("192.168.178.2", 9000) )
 
-
+ 
 def handle_timeout(self):
 	print ("Timeout")
 
@@ -36,7 +36,7 @@ class Motor(object):
 
 	StepDelay = 0.005
 
-	def turn_unipol_left(self):
+	def turn_motor_left(self):
                 GPIO.output(self.P1, GPIO.HIGH)
                 time.sleep(self.StepDelay)
                 GPIO.output(self.P1, GPIO.LOW)
@@ -83,7 +83,7 @@ class Motor(object):
                 GPIO.output(self.P4, GPIO.LOW)
                 time.sleep(self.StepDelay)
 
-	def turn_unipol_right(self):
+	def turn_motor_right(self):
 		GPIO.output(self.P4, GPIO.HIGH)
                 time.sleep(self.StepDelay)
                 GPIO.output(self.P4, GPIO.LOW)
@@ -133,24 +133,8 @@ class Motor(object):
 # Creating instances for Motors 			
 m1 = Motor([3,5,7,8])
 m2 = Motor([10,11,12,13])
-m3 = Motor([15,16,18,19])
-	 	
-#Calibrating
-while True:
-	m1.turn_bipol_right()
-	calib_x = GPIO.input(26)
-	if (calib_x == True):
-		print("calibrated_x")
-		break
 
-while True:
-	m2.turn_bipol_right()
-	m3.turn_bipol_right()
-	calib_y = GPIO.input(24)
-	if (calib_y == True):
-		print("calibrated_y")
-		break
-
+print("startup")	 	
 # Fader 1 Handling
 
 StepCount = 0
@@ -164,7 +148,7 @@ def fader_callback(path, tags, args, source):
 	#msg.append(args);
 	#client.send(msg)
  
-	FaderValue = round(args[0]*5000)
+	FaderValue = round(args[0]*100)
 	print ("fadervalue", FaderValue) 	
 	global StepCount
 
@@ -194,7 +178,7 @@ def fader_2_callback(path, tags, args, source):
         #msg.append(args);
         #client.send(msg)
 
-        FaderValue = round(args[0]*5000)
+        FaderValue = round(args[0])
         print ("fadervalue", FaderValue)
         global StepCount_m2
 
@@ -202,20 +186,22 @@ def fader_2_callback(path, tags, args, source):
                 while FaderValue > StepCount_m2:
                         StepCount_m2 += 1
                         m2.turn_bipol_left()
-			m3.turn_bipol_left()
                         print ("stepcount", StepCount_m2)
-
         elif FaderValue < StepCount_m2:
                 while FaderValue < StepCount_m2:
                         StepCount_m2 -= 1
                         m2.turn_bipol_right()
-			m3.turn_bipol_right()
                         print("stepcount", StepCount_m2)
 
 server.addMsgHandler( "/1/fader2",fader_2_callback)
 
-# Keep OSC Server running
-while True:	
+# Keeping OSC Server alive
+while True:
+	#Calibrating
+	calib_x = GPIO.input(26)
+	if (calib_x != True):
+		m1.turn_bipol_left()
+
 	server.handle_request()
 
 server.close()
